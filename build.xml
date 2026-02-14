@@ -10,7 +10,14 @@
     <!-- targets -->
     <target name="compile" description="compile project">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+    <classpath>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </classpath>
+</javac>
+
     </target>
 
     <target name="jar" depends="compile" description="generate the distribution jar">
@@ -39,5 +46,26 @@
     </target>
 
     <target name="rebuild" depends="clean,build" description="rebuild application"/>
+<path id="test.classpath">
+    <fileset dir="lib">
+        <include name="*.jar"/>
+    </fileset>
+    <pathelement path="${classes.dir}"/>
+</path>
+
+<target name="junit" depends="compile">
+    <mkdir dir="test-reports"/>
+
+    <junit printsummary="yes" haltonfailure="yes">
+        <classpath refid="test.classpath"/>
+        <batchtest todir="test-reports">
+            <fileset dir="src/test">
+                <include name="**/*Test.java"/>
+            </fileset>
+        </batchtest>
+        <formatter type="xml"/>
+    </junit>
+</target>
+
 
 </project>
