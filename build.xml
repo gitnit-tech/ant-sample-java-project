@@ -67,5 +67,16 @@
     </junit>
 </target>
 
+<property name="war.dir" value="${build.dir}/war"/>
+
+<target name="war" depends="compile" description="create war file">
+    <mkdir dir="${war.dir}"/>
+
+    <war destfile="${war.dir}/${ant.project.name}.war" 
+         webxml="web.xml">
+
+        <fileset dir="${classes.dir}"/>
+    </war>
+</target>
 
 </project>
